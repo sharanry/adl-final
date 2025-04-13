@@ -1,5 +1,6 @@
 /data
-/models
+/models/*.pt
+/models/*.pth
 /run_results
 /sam_masks
 
