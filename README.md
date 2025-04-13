@@ -4,7 +4,7 @@
 ```bash
 conda create -n comp0197-cw2-pt python=3.12 pip && 
 conda activate comp0197-cw2-pt && 
-pip install torch==2.5.0 torchvision --index-url https://download.pytorch.org/whl/cpu
+pip install torch==2.5.0 torchvision
 ```
 
 3. Install additional dependencies.
@@ -27,11 +27,11 @@ python generate_sam_mask_from_bounding_box.py --dataset_size 10
 python gen_cam_dataset.py
 ```
 
-5. Train the models.
+5. Train the models. Demonstrating with only 2 epochs. If you don't pass any args it will run for 50 epochs.
 ```bash
-python train.py --baseline
+python train.py --baseline --epochs 2
 ```
 
 ```bash
-python train.py --our-model
+python train.py --our-model --epochs 2
 ```

@@ -441,7 +441,7 @@ print("\n=== Using Segmentation Models PyTorch (SMP) for improved performance ==
 TARGETS_LIST = [DatasetSelection.CAM,
                 DatasetSelection.Trimap, DatasetSelection.BBox, DatasetSelection.SAM]
 BATCH_SIZE = 64
-EPOCHS = 100
+EPOCHS = 50
 LEARNING_RATE = 1e-3
 OPTIMIZER_NAME = 'adam'
 SCHEDULER_NAME = 'reduce_on_plateau'
