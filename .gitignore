@@ -1,0 +1,6 @@
+/data
+/models
+/run_results
+/sam_masks
+
+__pycache__
