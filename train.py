@@ -13,7 +13,7 @@ from typing import Dict, List, Tuple, Set
 from itertools import product
 from datasets import *
 
-from IPython.display import display
+# from IPython.display import display
 from PIL import Image, ImageDraw, ImageFont
 from plot_utils import plot_image, combine_images_side_by_side, tensor_to_pil_image, apply_heatmap
 
@@ -51,7 +51,7 @@ for idx, img_file in enumerate(image_files):
     tri_img = plot_image(trimap_path, 'Segmentation Mask')
 
     combined_img = combine_images_side_by_side(img, tri_img)
-    display(combined_img)
+    # display(combined_img)
 
 # Optional: Display annotation statistics
 
@@ -138,7 +138,7 @@ def visualize_predictions(model, dataset, num_samples=8, visual_fname='foo.png')
 
     os.makedirs('visuals', exist_ok=True)
     final_img.save(os.path.join('visuals', visual_fname))
-    display(final_img)
+    # display(final_img)
 
 
 def evaluate_model_metrics(model, dataloader, device):
@@ -309,7 +309,8 @@ class SAMLoss(nn.Module):
         logits_2ch = torch.cat([background_logits, logits], dim=1)
         res = self.loss_fn(logits_2ch, targets.long())
         if torch.isnan(res).item():
-            print('SAMLoss is NaN')
+            pass
+            # print('SAMLoss is NaN')
         return torch.nan_to_num(res)
 
 
@@ -369,7 +370,7 @@ def train_model(
 
         optimizer.zero_grad()  # initialize gradients at start of epoch
 
-        for i, (images, image_data) in enumerate(train_dataloader, disable=True):
+        for i, (images, image_data) in enumerate(train_dataloader):
             # images = images.to(device)
             # image_data = image_data.to(device)
 
@@ -599,7 +600,6 @@ class CustomUNet(nn.Module):
         return res
 
 import argparse
-
 def main(args):
     if args.baseline:
         GT_PROPORTIONS = [1.0]
@@ -664,7 +664,7 @@ def main(args):
             {DatasetSelection.Trimap: 1.0, DatasetSelection.CAM: cam_loss_weight,
                 DatasetSelection.BBox: bbox_loss_weight, DatasetSelection.SAM: sam_loss_weight},
             train_dataloader,
-            epochs=EPOCHS,
+            epochs=args.epochs,
             learning_rate=LEARNING_RATE,
             optimizer_name=OPTIMIZER_NAME,
             scheduler_name=SCHEDULER_NAME,
@@ -697,6 +697,8 @@ if __name__ == "__main__":
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--baseline", action="store_true", help="Run baseline experiment.")
     group.add_argument("--our-model", action="store_true", help="Run our model experiment.")
+    parser.add_argument("--epochs", type=int, default=EPOCHS, help="Number of epochs to train for.")
+
 
     args = parser.parse_args()
     main(args)
