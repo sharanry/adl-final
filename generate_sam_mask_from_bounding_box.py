@@ -7,8 +7,6 @@ import numpy as np
 from PIL import Image
 # Insert required paths
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'sam2')))
 
 # import matplotlib.pyplot as plt
 import xml.etree.ElementTree as ET
@@ -46,7 +44,7 @@ args = parser.parse_args()
 if __name__ == "__main__":
     # === PATH SETUP ===
     # Define base directories for better consistency.
-    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'data'))
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'data', 'oxford-iiit-pet'))
     annotations_dir = os.path.join(base_dir, 'annotations')
     images_dir = os.path.join(base_dir, 'images')
     xml_dir = os.path.join(annotations_dir, 'xmls')
@@ -56,12 +54,12 @@ if __name__ == "__main__":
 
     from torchvision.datasets import OxfordIIITPet    
 
-    train_dataset = OxfordIIITPet(root=base_dir, 
+    train_dataset = OxfordIIITPet(root=base_dir.rsplit('/', 1)[0],
                                 split='trainval',
                                 target_types=["category", "segmentation"],
                                 download=True)
 
-    test_dataset = OxfordIIITPet(root=base_dir, 
+    test_dataset = OxfordIIITPet(root=base_dir.rsplit('/', 1)[0],
                             split='test',
                             target_types=["category", "segmentation"],
                             download=True)
@@ -138,10 +136,10 @@ if __name__ == "__main__":
     all_scores = []  # To store per-image scores as torch tensors.
     processed_names = []  # To store processed image names.
 
-    print(f"Processing {sample_size} images using mode '{mode}'...")
+    print(f"Processing {sample_size} images using mode '{mode}'. This will take a while on cpu..")
 
 
-    for idx in selected_indices:
+    for i, idx in enumerate(selected_indices):
         try:
             img_path = os.path.join(images_dir, f'{valid_images[idx]}.jpg')
             img = Image.open(img_path)

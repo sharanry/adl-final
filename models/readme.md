@@ -1,0 +1,1 @@
+On running ```./generate_sam_mask_from_bounding_box.py``` model ```sam2.pt``` should be automatically downloaded here
